@@ -8,8 +8,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="mobile-header">
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i> Меню
+        </button>
+        <div class="mobile-person-name" id="mobile-person-name">Известные люди Пензы</div>
+    </div>
+
+    <div class="menu-overlay"></div>
+
     <div class="catalog">
-        <h2><i class="fas fa-users"></i> Известные люди Пензы</h2>
+        <h2>
+            <span><i class="fas fa-users"></i> Известные люди Пензы</span>
+            <button class="catalog-close"><i class="fas fa-times"></i></button>
+        </h2>
         <ul id="people-list"></ul>
         <div class="footer-info">
             <p><i class="fas fa-info-circle"></i> Всего людей в базе: <span id="people-count">0</span></p>

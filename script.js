@@ -35,24 +35,24 @@ const peopleData = [
         audio: "audio/lermontov.mp3",
         audioTranscript: `Лермонтов — один из величайших поэтов России.`
     },
-{
-    "id": 3,
-    "name": "Александр Иванович Куприн",
-    "birthdate": "26 августа (7 сентября) 1870",
-    "birthplace": "Наровчат, Пензенская область",
-    "years": "1870-1938",
-    "activity": "Писатель-реалист, прозаик, поэт, драматург, переводчик",
-    "category": "Литература",
-    "fame": "Классик русской литературы",
-    "image": "images/kuprin.jpg",
-    "biography": "Александр Куприн — русский писатель-реалист. Родился в семье чиновника. Рано потерял отца. Образование получил в Московской Разумовской школе и Александровском военном училище. Четыре года служил офицером, что дало материал для будущих книг. В 1894 году ушёл в отставку и посвятил себя литературе. Дебютировал рассказом «Последний дебют» в 1889 году. Расцвет творчества пришёлся на начало XX века. Участвовал в общественной жизни, его произведения часто поднимали остросоциальные темы. После революции эмигрировал, но в 1937 году вернулся в СССР. Скончался в Ленинграде в 1938 году.",
-    "gallery": [
-        "images/kuprin_1.jpg",
-        "images/kuprin_2.jpg"
-    ],
-    "audio": "audio/kuprin.mp3",
-    "audioTranscript": "Александр Иванович Куприн — выдающийся русский писатель-реалист, автор знаменитых повестей «Поединок», «Олеся» и «Гранатовый браслет». Его творчество, известное глубоким психологизмом и состраданием к человеку, остаётся живым в многочисленных экранизациях и театральных постановках."
-}
+    {
+        id: 3,
+        name: "Александр Иванович Куприн",
+        birthdate: "26 августа (7 сентября) 1870",
+        birthplace: "Наровчат, Пензенская область",
+        years: "1870-1938",
+        activity: "Писатель-реалист, прозаик, поэт, драматург, переводчик",
+        category: "Литература",
+        fame: "Классик русской литературы",
+        image: "images/kuprin.jpg",
+        biography: "Александр Куприн — русский писатель-реалист. Родился в семье чиновника. Рано потерял отца. Образование получил в Московской Разумовской школе и Александровском военном училище. Четыре года служил офицером, что дало материал для будущих книг. В 1894 году ушёл в отставку и посвятил себя литературе. Дебютировал рассказом «Последний дебют» в 1889 году. Расцвет творчества пришёлся на начало XX века. Участвовал в общественной жизни, его произведения часто поднимали остросоциальные темы. После революции эмигрировал, но в 1937 году вернулся в СССР. Скончался в Ленинграде в 1938 году.",
+        gallery: [
+            "images/kuprin_1.jpg",
+            "images/kuprin_2.jpg"
+        ],
+        audio: "audio/kuprin.mp3",
+        audioTranscript: "Александр Иванович Куприн — выдающийся русский писатель-реалист, автор знаменитых повестей «Поединок», «Олеся» и «Гранатовый браслет». Его творчество, известное глубоким психологизмом и состраданием к человеку, остаётся живым в многочисленных экранизациях и театральных постановках."
+    }
 ];
 
 let currentPerson = null;
@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     audioElement = document.getElementById("real-audio");
     initCatalog();
     setupEventListeners();
+    setupMobileMenu();
 
     if (peopleData.length > 0) selectPerson(peopleData[0].id);
     document.getElementById("people-count").textContent = peopleData.length;
@@ -90,6 +91,10 @@ function selectPerson(id) {
     currentPerson = p;
     updateTextFormat(p);
     updateAudioFormat(p);
+    
+    if (window.innerWidth <= 768) {
+        document.getElementById("mobile-person-name").textContent = p.name;
+    }
 }
 
 function updateTextFormat(p) {
@@ -110,7 +115,7 @@ function updateTextFormat(p) {
     p.gallery.forEach(src => {
         const d = document.createElement("div");
         d.className = "gallery-item";
-        d.innerHTML = `<img src="${src}">`;
+        d.innerHTML = `<img src="${src}" alt="Фото ${p.name}">`;
         gal.appendChild(d);
     });
 }
@@ -119,7 +124,10 @@ function updateAudioFormat(p) {
     document.getElementById("audio-person-name").textContent = p.name;
     document.getElementById("audio-description").textContent = `Аудиобиография ${p.name}`;
     document.getElementById("audio-transcript").innerHTML = p.audioTranscript.replace(/\n/g, "<br><br>");
-    document.getElementById("audio-image").src = p.image;
+    
+    const audioImg = document.getElementById("audio-image");
+    audioImg.src = p.image;
+    audioImg.alt = p.name;
 
     audioElement.src = p.audio || "";
 
@@ -132,11 +140,15 @@ function updateAudioFormat(p) {
 
 function setupEventListeners() {
     document.getElementById("text-format-btn").onclick = () => {
+        document.getElementById("text-format-btn").classList.add("active");
+        document.getElementById("audio-format-btn").classList.remove("active");
         document.getElementById("text-content").classList.add("active");
         document.getElementById("audio-content").classList.remove("active");
     };
 
     document.getElementById("audio-format-btn").onclick = () => {
+        document.getElementById("audio-format-btn").classList.add("active");
+        document.getElementById("text-format-btn").classList.remove("active");
         document.getElementById("audio-content").classList.add("active");
         document.getElementById("text-content").classList.remove("active");
     };
@@ -155,7 +167,32 @@ function setupEventListeners() {
         const p = (audioElement.currentTime / audioElement.duration) * 100;
         document.getElementById("progress-bar").style.width = p + "%";
         document.getElementById("current-time").textContent =
-            convertSecondsToTime(audioElement.currentTime);
+            convertSecondsToTime(Math.floor(audioElement.currentTime));
+    });
+}
+
+function setupMobileMenu() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const closeBtn = document.querySelector('.catalog-close');
+    const catalog = document.querySelector('.catalog');
+    const overlay = document.querySelector('.menu-overlay');
+
+    function toggleMenu() {
+        catalog.classList.toggle('mobile-visible');
+        overlay.classList.toggle('mobile-visible');
+    }
+
+    if (menuBtn) menuBtn.addEventListener('click', toggleMenu);
+    if (closeBtn) closeBtn.addEventListener('click', toggleMenu);
+    if (overlay) overlay.addEventListener('click', toggleMenu);
+
+    const catalogItems = document.querySelectorAll('.catalog li');
+    catalogItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+        });
     });
 }
 
