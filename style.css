@@ -7,9 +7,29 @@
 
 body {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
     background: linear-gradient(135deg, #1e293b, #0f172a);
     color: #e2e8f0;
+}
+
+/* Мобильное меню */
+.mobile-header {
+    display: none;
+    background: rgba(15, 23, 42, .95);
+    padding: 15px 20px;
+    border-bottom: 1px solid #334155;
+}
+
+.mobile-menu-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .catalog {
@@ -22,6 +42,14 @@ body {
     box-shadow: 2px 0 10px rgba(0, 0, 0, .2);
     display: flex;
     flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.catalog.mobile-hidden {
+    transform: translateX(-100%);
 }
 
 .catalog h2 {
@@ -31,7 +59,17 @@ body {
     font-size: 1.5rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
+}
+
+.catalog-close {
+    display: none;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .catalog ul {
@@ -67,23 +105,26 @@ body {
 
 .content {
     flex: 1;
-    padding: 30px;
+    padding: 20px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
 }
 
 .person-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid rgba(255, 255, 255, .1);
 }
 
 .person-name {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+    text-align: center;
 }
 
 .format-switcher {
@@ -91,22 +132,31 @@ body {
     background: #1e293b;
     border-radius: 8px;
     overflow: hidden;
+    align-self: center;
+    width: 100%;
+    max-width: 300px;
 }
 
 .format-btn {
-    padding: 10px 20px;
+    padding: 10px 15px;
     border: none;
     background: transparent;
     color: #e2e8f0;
-    font-size: 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
 }
 
 .format-btn.active {
     background: #3b82f6;
+}
+
+.format-btn i {
+    font-size: 1rem;
 }
 
 .content-section {
@@ -137,24 +187,27 @@ body {
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, .08);
     box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
-    padding: 25px;
+    padding: 20px;
     border-radius: 12px;
+    margin-bottom: 20px;
 }
 
 .person-main-info {
     display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .person-image-container {
-    width: 250px;
+    width: 100%;
+    max-width: 250px;
     position: relative;
+    align-self: center;
 }
 
 .person-image {
     width: 100%;
-    height: 300px;
+    height: 250px;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -168,13 +221,220 @@ body {
     padding: 8px;
     text-align: center;
     font-weight: 700;
+    font-size: 0.9rem;
 }
 
 .person-details {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .info-item {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    font-size: 0.95rem;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+/* Аудио плеер для мобильных */
+.audio-player {
+    padding: 15px;
+}
+
+.audio-player audio {
+    width: 100%;
+}
+
+.audio-transcript {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Оверлей для меню */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Адаптивные стили */
+@media (max-width: 1024px) {
+    .catalog {
+        width: 250px;
+    }
+    
+    .person-image-container {
+        width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .catalog {
+        width: 280px;
+        transform: translateX(-100%);
+    }
+    
+    .catalog.mobile-visible {
+        transform: translateX(0);
+    }
+    
+    .catalog-close {
+        display: block;
+    }
+    
+    .content {
+        margin-left: 0;
+        padding: 15px;
+    }
+    
+    .person-name {
+        font-size: 1.6rem;
+    }
+    
+    .format-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .format-btn i {
+        font-size: 0.9rem;
+    }
+    
+    .menu-overlay.mobile-visible {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .person-name {
+        font-size: 1.4rem;
+    }
+    
+    .format-switcher {
+        width: 100%;
+    }
+    
+    .format-btn {
+        padding: 8px;
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+    
+    .person-main-info,
+    .bio-text,
+    .audio-player,
+    .audio-transcript {
+        padding: 15px;
+    }
+    
+    .person-image {
+        height: 200px;
+    }
+    
+    .info-item {
+        font-size: 0.9rem;
+    }
+}
+
+/* Планшеты в портретной ориентации */
+@media (min-width: 481px) and (max-width: 768px) {
+    .person-main-info {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .person-image-container {
+        max-width: 180px;
+    }
+    
+    .person-image {
+        height: 220px;
+    }
+}
+
+/* Ландшафтная ориентация на мобильных */
+@media (max-height: 600px) and (orientation: landscape) {
+    .catalog {
+        padding-top: 10px;
+    }
+    
+    .catalog h2 {
+        padding: 0 15px 10px;
+        font-size: 1.2rem;
+    }
+    
+    .catalog li {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .footer-info {
+        padding: 10px 15px 0;
+        font-size: 0.8rem;
+    }
+}
+
+/* Высокопиксельные экраны */
+@media (min-resolution: 192dpi) {
+    .person-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Темная тема по умолчанию */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #0f172a, #020617);
+    }
+}
+
+/* Яркая тема */
+@media (prefers-color-scheme: light) {
+    body {
+        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+        color: #1e293b;
+    }
+    
+    .catalog {
+        background: rgba(255, 255, 255, .95);
+        color: #1e293b;
+    }
+    
+    .catalog li:hover {
+        background: #f1f5f9;
+    }
+    
+    .person-main-info,
+    .bio-text,
+    .audio-player,
+    .audio-transcript {
+        background: rgba(255, 255, 255, .9);
+        border: 1px solid rgba(0, 0, 0, .1);
+        color: #1e293b;
+    }
+    
+    .format-switcher {
+        background: #f1f5f9;
+    }
+    
+    .format-btn {
+        color: #1e293b;
+    }
+}
