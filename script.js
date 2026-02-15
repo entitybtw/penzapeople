@@ -8,13 +8,13 @@ const peopleData = [
         activity: "Литературный критик",
         category: "Литература",
         fame: "Критик XIX века",
-        image: "images/belinsky.jpg",
+        image: "images/belinskiy.jpg",
         biography: `Белинский — русский литературный критик и публицист. Родился в Пензе. Оказал огромное влияние на русскую литературу.`,
         gallery: [
-            "images/belinsky_1.jpg",
-            "images/belinsky_2.jpg"
+            "images/belinskiy_1.jpg",
+            "images/belinskiy_2.jpg"
         ],
-        audio: "audio/belinsky.mp3",
+        audio: "audio/belinskiy.mp3",
         audioTranscript: `Белинский — выдающийся литературный критик XIX века.`
     },
     {
