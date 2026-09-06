@@ -13,4 +13,4 @@ jobs:
       - name: Deploy
         run: |
           rsync -a --delete --exclude='.git' ./ /var/www/penzapeople/
-          deploy add penzapeople /var/www/penzapeople
+          deploy add penzapeople /var/www/penzapeople --port 8086
